@@ -29,7 +29,7 @@ module.exports = class RoleCommand extends commando.Command {
 
         if (roleName.startsWith('add')) {
 
-			if (!message.member.hasPermission("MANAGE_ROLES") || message.author.id != '254728052070678529') return message.channel.send("You do not have permission to add a role for public use.");
+			if (!message.member.hasPermission("MANAGE_ROLES") && message.author.id != '254728052070678529') return message.channel.send("You do not have permission to add a role for public use.");
 			
 			roleName = roleName.slice(4);
             
