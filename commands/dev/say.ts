@@ -1,4 +1,6 @@
-const commando = require('discord.js-commando');
+import { DMChannel, GroupDMChannel, TextChannel } from 'discord.js';
+import * as commando from 'discord.js-commando';
+import { CommandMessage } from 'discord.js-commando';
 
 module.exports = class SayCommand extends commando.Command {
 
@@ -15,25 +17,25 @@ module.exports = class SayCommand extends commando.Command {
                     prompt: 'Please specify something for the bot to say.',
                     type: 'string',
                     default: '',
-					validate: botMsg => { if (botMsg) return true; else return true; }
+					validate: (botMsg: String) => { if (botMsg) return true; else return true; }
                 }
             ]
         });
     }
 
-    async run (message, { botMsg }) {
-        
+	async run (message: CommandMessage, { botMsg }) {
 		// Craigz and Snowful and the [+] role.
-        if (!["254728052070678529", "168190789715755009"].some((id) => message.author.id === id) || !message.member.roles.get('453259812931895299')) return;
+        if (!["254728052070678529", "168190789715755009"].some((id) => message.author.id === id) && !message.member.roles.get('453259812931895299')) return;
         
-        message.delete(() => console.log('Error deleting message'));
+		message.delete()
+			.catch(() => console.log('Error deleting the message for !say'));
         var toChannel = message.channel;
         
         if (botMsg.startsWith('to ')) {
             
             botMsg = botMsg.slice(3);
             let chanName = botMsg.split(' ')[0];
-            toChannel = await message.guild.channels.find(channel => channel.name.includes(chanName));
+            toChannel = message.guild.channels.find(channel => channel.name.includes(chanName)) as TextChannel | DMChannel | GroupDMChannel;
 
             if (!toChannel || toChannel.type != 'text') return message.channel.send("Couldn't find channel (or it's not a text channel).");
             botMsg = botMsg.slice(chanName.length);

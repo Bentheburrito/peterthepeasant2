@@ -1,7 +1,7 @@
-const commando = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const { delay, getTimeUntil } = require('../../utils/timeutils.js');
-const { getRandom, orderedReact} = require('../../utils/genutils.js')
+import * as commando from 'discord.js-commando';
+import { RichEmbed } from 'discord.js';
+let { delay, getTimeUntil } = require('../../utils/timeutils');
+let { getRandom, orderedReact } = require('../../utils/genutils');
 
 const battleMessages = ['lend your sword to', 'give support to', 'ally with', 'support', 'lend a hand to', 'side with'];
 const battleMotos = ['For Narnia!', 'For the blue cubes!', 'For the craigz\' sleep schedule!', 'For Warcube!', 'For pizza!', 'For the Queen!']
@@ -72,11 +72,11 @@ module.exports = class BattleCommand extends commando.Command {
 		else opponentReason = opponentReason.first().content;
 
         const authorEmoji = this.client.emojis.random();
-        const opponentEmoji = this.client.emojis.random();
+        let opponentEmoji = this.client.emojis.random();
         while (opponentEmoji === authorEmoji) opponentEmoji = this.client.emojis.random();
 
         let battleEnd = Date.now() + time * 1000 * 60;
-
+		
         embed = new RichEmbed()
             .setTitle(`The battle has begun! Cast your vote before the ${time} minute timer is up.`)
             .setDescription(`**React with ${authorEmoji.toString()} to ${getRandom(battleMessages)} ${message.author.username}!**\n"${reason}"\n\n**React with ${opponentEmoji.toString()} to ${getRandom(battleMessages)} ${opponent.username}!**\n"${opponentReason}"`)

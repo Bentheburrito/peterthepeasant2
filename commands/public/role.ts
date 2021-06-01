@@ -1,5 +1,5 @@
-const commando = require('discord.js-commando');
-const fs = require('fs');
+import * as commando from 'discord.js-commando';
+import * as fs from 'fs';
 
 module.exports = class RoleCommand extends commando.Command {
     constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class RoleCommand extends commando.Command {
 
         if (!roleName) return message.channel.send("Please provide arguments (Usage: !role <roleName>).");
 
-        let publicRoles = JSON.parse(fs.readFileSync('./publicRoles.json'));
+        let publicRoles = JSON.parse(fs.readFileSync('./publicRoles.json').toString());
 
         if (roleName.startsWith('add')) {
 

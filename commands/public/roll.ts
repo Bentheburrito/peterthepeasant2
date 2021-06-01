@@ -1,4 +1,4 @@
-const commando = require('discord.js-commando');
+import * as commando from 'discord.js-commando';
 
 module.exports = class DiceRollCommand extends commando.Command {
 	constructor(client) {

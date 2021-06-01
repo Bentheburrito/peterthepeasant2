@@ -1,7 +1,9 @@
-const commando = require('discord.js-commando');
-require('dotenv').config();
+import { TextChannel } from 'discord.js';
+import * as commando from 'discord.js-commando';
 
-const client = new commando.Client({
+import 'dotenv/config';
+
+const client = new commando.CommandoClient({
     commandPrefix: '!',
     unknownCommandResponse: false,
     owner: '254728052070678529',
@@ -23,13 +25,15 @@ client.on('message', message => {
 
 	// Message easter eggs
     if (message.content.endsWith('lol')) {
-        if (message.author.id == 356587391085051905 && Math.floor(Math.random() * 2) === 1) {
+        if (message.author.id == "356587391085051905" && Math.floor(Math.random() * 2) === 1) {
             message.channel.send('Haha');
-        } else if (Math.floor(Math.random() * 30) + 1 === 1) message.channel.send('lypop').then(m => m.channel.send('Yer welcome, lord Shermy.'));
+		} else if (Math.floor(Math.random() * 30) + 1 === 1) message.channel.send('lypop')
+			.then(() => message.channel.send('Yer welcome, lord Shermy.'))
+			.catch(e => console.log(`Couldn't send reply in ${message.channel.id}: ${e}`));
     }
     if (message.content.toLowerCase() === 'lypop' || message.content.toLowerCase() === 'lipop' || message.content.toLowerCase() === 'lollypop') {
         message.react('🍭');
-        if (message.author.id == 263313632585187330) message.channel.send(lypopReplies[Math.floor(Math.random() * lypopReplies.length)]);
+        if (message.author.id == "263313632585187330") message.channel.send(lypopReplies[Math.floor(Math.random() * lypopReplies.length)]);
 	}
 	
 	if (message.content.includes('peter') && (message.content.includes('reaction') || message.content.includes('react'))) {
@@ -42,12 +46,15 @@ client.on('message', message => {
 
 client.on("guildMemberAdd", member => {
 	recentNewMembers[member.id] = Date.now();
-    member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))).send(`Hi there, ${member.user.username}, welcome to the Official Warcube Discord!`);
+	let channel = member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
+	channel.send(`Hi there, ${member.user.username}, welcome to the Official Warcube Discord!`);
 });
 
 client.on("guildMemberRemove", member => {
-	if (Date.now() - recentNewMembers[member.id] < 120000) // If a member left within 2 minutes of joining, it's probably a bot.
-    	member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))).send(`Oh dear, another bot. Everyone say bye to ${member.user.username} :(`);
+	if (Date.now() - recentNewMembers[member.id] < 120000) { // If a member left within 2 minutes of joining, it's probably a bot.
+		let channel = member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
+		channel.send(`Everyone say bye to ${member.user.username} :(`);
+	}
 });
 
 
