@@ -1,3 +1,3 @@
 # Peter The Peasant
 
-Built in Node.JS, available in the Official Warcube Discord Server found here: https://discord.gg/BNNNZvU
+Built with TypeScript/Node.JS, and Discord.JS. available in the Official Warcube Discord Server found here: https://discord.gg/BNNNZvU
