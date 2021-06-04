@@ -27,7 +27,7 @@ module.exports = class DiceRollCommand extends commando.Command {
 		});
 	}
 	
-	async run (message, {sides, amount}) {
+	async run (message: commando.CommandoMessage, {sides, amount}) {
 
 		if (isNaN(sides)) return message.channel.send("Please use numbers only");
 		if (!sides) sides = 6;

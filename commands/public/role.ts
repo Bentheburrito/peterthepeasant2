@@ -21,7 +21,7 @@ module.exports = class RoleCommand extends commando.Command {
         });
     }
 
-    async run(message, {roleName}) {
+    async run(message: commando.CommandoMessage, {roleName}) {
 
         if (!roleName) return message.channel.send("Please provide arguments (Usage: !role <roleName>).");
 
@@ -33,7 +33,7 @@ module.exports = class RoleCommand extends commando.Command {
 			
 			roleName = roleName.slice(4);
             
-            let roleToAdd = message.guild.roles.find(roleToAdd => roleToAdd.name.toLowerCase().includes(roleName.toLowerCase()));
+            let roleToAdd = message.guild.roles.cache.find(roleToAdd => roleToAdd.name.toLowerCase().includes(roleName.toLowerCase()));
             if (!roleToAdd) return message.channel.send("Couldn't find role to add.");
 
             if (publicRoles.some(role => roleToAdd.id === role.id)) return message.channel.send("That role is already available for public use.");
@@ -48,16 +48,16 @@ module.exports = class RoleCommand extends commando.Command {
         }
 
         let guildMember = message.member;
-        let wantedRole = message.guild.roles.find(role => role.name.toLowerCase().includes(roleName.toLowerCase()));
+        let wantedRole = message.guild.roles.cache.find(role => role.name.toLowerCase().includes(roleName.toLowerCase()));
         if (!wantedRole) return message.channel.send("Role not found.");
 
         if (!publicRoles.some(role => wantedRole.id === role.id)) return message.say('That role cannnot be self assigned.');
 
-        if (guildMember.roles.find(role => role.id === wantedRole.id)) {
-            guildMember.removeRole(wantedRole);
+        if (guildMember.roles.cache.find(role => role.id === wantedRole.id)) {
+            guildMember.roles.remove(wantedRole);
         	message.say(`Removed role '${wantedRole.name}'`);
         } else {
-            guildMember.addRole(wantedRole);
+            guildMember.roles.add(wantedRole);
             message.say(`Assigned role '${wantedRole.name}'`);
         }
     }

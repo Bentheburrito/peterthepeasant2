@@ -1,6 +1,5 @@
-import { DMChannel, GroupDMChannel, TextChannel } from 'discord.js';
+import { DMChannel, TextChannel } from 'discord.js';
 import * as commando from 'discord.js-commando';
-import { CommandMessage } from 'discord.js-commando';
 
 module.exports = class SayCommand extends commando.Command {
 
@@ -23,7 +22,7 @@ module.exports = class SayCommand extends commando.Command {
         });
     }
 
-	async run (message: CommandMessage, { botMsg }) {
+	async run (message, { botMsg }) {
 		// Craigz and Snowful and the [+] role.
         if (!["254728052070678529", "168190789715755009"].some((id) => message.author.id === id) && !message.member.roles.get('453259812931895299')) return;
         
@@ -35,7 +34,7 @@ module.exports = class SayCommand extends commando.Command {
             
             botMsg = botMsg.slice(3);
             let chanName = botMsg.split(' ')[0];
-            toChannel = message.guild.channels.find(channel => channel.name.includes(chanName)) as TextChannel | DMChannel | GroupDMChannel;
+            toChannel = message.guild.channels.find(channel => channel.name.includes(chanName)) as TextChannel | DMChannel;
 
             if (!toChannel || toChannel.type != 'text') return message.channel.send("Couldn't find channel (or it's not a text channel).");
             botMsg = botMsg.slice(chanName.length);

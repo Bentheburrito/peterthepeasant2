@@ -4,10 +4,8 @@ import * as commando from 'discord.js-commando';
 import 'dotenv/config';
 
 const client = new commando.CommandoClient({
-    commandPrefix: '!',
-    unknownCommandResponse: false,
+    commandPrefix: '!', 
     owner: '254728052070678529',
-    disableEveryone: true    
 });
 
 const lypopReplies = ['Poor Myriad...', 'Myriad will be displeased.', ':regional_indicator_i: :heart: :lollipop:', 'Haha- oh darn too late.', '\'s are good.']
@@ -46,13 +44,13 @@ client.on('message', message => {
 
 client.on("guildMemberAdd", member => {
 	recentNewMembers[member.id] = Date.now();
-	let channel = member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
+	let channel = member.guild.channels.cache.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
 	channel.send(`Hi there, ${member.user.username}, welcome to the Official Warcube Discord!`);
 });
 
 client.on("guildMemberRemove", member => {
 	if (Date.now() - recentNewMembers[member.id] < 120000) { // If a member left within 2 minutes of joining, it's probably a bot.
-		let channel = member.guild.channels.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
+		let channel = member.guild.channels.cache.find(c => c.type === 'text' && (c.name.includes('welcome') || c.name.includes('general'))) as TextChannel;
 		channel.send(`Everyone say bye to ${member.user.username} :(`);
 	}
 });
@@ -65,7 +63,7 @@ client.registry
     .registerDefaultGroups()
     .registerDefaultCommands({
         help: false,
-        eval_: false
+        eval: false
     })
     .registerGroups([
         ['public', 'Public Member Commands'],

@@ -1,5 +1,5 @@
 const commando = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class HelpCommand extends commando.Command {
 	constructor(client) {
@@ -26,7 +26,7 @@ module.exports = class HelpCommand extends commando.Command {
 		let pubCommands = this.client.registry.groups.find(group => group.id === 'public');
 		if (!pubCommands) return message.say('Couldn\'t get public commands.');
 
-		let embed = new RichEmbed();
+		let embed = new MessageEmbed();
 
 		if (!commandName) {
 			embed.setTitle(`Type !help <commandName> for more details.`).setColor('#75e8ff');

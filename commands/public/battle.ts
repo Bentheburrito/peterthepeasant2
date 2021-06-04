@@ -1,5 +1,5 @@
 import * as commando from 'discord.js-commando';
-import { RichEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 let { delay, getTimeUntil } = require('../../utils/timeutils');
 let { getRandom, orderedReact } = require('../../utils/genutils');
 
@@ -27,7 +27,7 @@ module.exports = class BattleCommand extends commando.Command {
 				},
                 {
                     key: 'time',
-                    prompt: 'Amount of time the battle should last. min: 1 minute, max: 1440 minutes (24 hours).',
+                    prompt: 'Amount of time (in minutes) the battle should last. minimum: 1 minute, maximum: 1440 minutes (24 hours).',
                     type: 'integer',
                     default: 5,
                     validate: time => (time && (time < 1 || time > 1440)) ? `Limits exceeded. ${time} must be between 1 and 1440 minutes (inclusive).` : true
@@ -43,13 +43,13 @@ module.exports = class BattleCommand extends commando.Command {
         });
     }
 
-    async run (message, { opponent, time, reason }) {
+    async run (message: commando.CommandoMessage, { opponent, time, reason }) {
         
         if (!opponent) return message.say('Please provide an opponent. (!battle <opponentName>)')
 
         let opponentReason = getRandom(battleMotos);
 
-		let embed = new RichEmbed()
+		let embed = new MessageEmbed()
 			.setTitle('A Challenger Approaches!')
 			.addField(`${opponent.username}, you've been challenged by ${message.author.username}!`, 'React with :white_check_mark: to accept, and :x: to refuse!')
 			.setFooter(`Battle set for ${time} minutes.`)
@@ -71,13 +71,13 @@ module.exports = class BattleCommand extends commando.Command {
 		if (!opponentReason) opponentReason = getRandom(battleMotos);
 		else opponentReason = opponentReason.first().content;
 
-        const authorEmoji = this.client.emojis.random();
-        let opponentEmoji = this.client.emojis.random();
-        while (opponentEmoji === authorEmoji) opponentEmoji = this.client.emojis.random();
+        const authorEmoji = this.client.emojis.cache.random();
+        let opponentEmoji = this.client.emojis.cache.random();
+        while (opponentEmoji === authorEmoji) opponentEmoji = this.client.emojis.cache.random();
 
         let battleEnd = Date.now() + time * 1000 * 60;
 		
-        embed = new RichEmbed()
+        embed = new MessageEmbed()
             .setTitle(`The battle has begun! Cast your vote before the ${time} minute timer is up.`)
             .setDescription(`**React with ${authorEmoji.toString()} to ${getRandom(battleMessages)} ${message.author.username}!**\n"${reason}"\n\n**React with ${opponentEmoji.toString()} to ${getRandom(battleMessages)} ${opponent.username}!**\n"${opponentReason}"`)
             .setFooter(`${getTimeUntil(battleEnd - Date.now())} left`)
@@ -96,7 +96,7 @@ module.exports = class BattleCommand extends commando.Command {
         let authorVotes = 0;
         let opponentVotes = 0;
 
-        votes.tap(vote => {
+        votes.forEach(vote => {
 
             if (vote.emoji.id === authorEmoji.id) authorVotes = vote.count;
             else if (vote.emoji.id === opponentEmoji.id) opponentVotes = vote.count;
@@ -114,5 +114,5 @@ module.exports = class BattleCommand extends commando.Command {
         message.say(authorVotes > opponentVotes ? `The battle of ${message.author.username} vs. ${opponent.username} just ended, ${message.author.username} is the victor!` :
             authorVotes === opponentVotes ? `The battle of ${message.author.username} vs. ${opponent.username} just ended, ${message.author.username} and ${opponent.username} have come to a draw!` :
             `The battle of ${message.author.username} vs. ${opponent.username} just ended, ${opponent.username} is the victor!`);
-    }
+	}
 }

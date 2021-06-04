@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.4.2",
-    "discord.js-commando": "github:discordjs/Commando#djs-v11",
+    "discord.js": "^12.5.3",
+    "discord.js-commando": "^0.12.3",
     "dotenv": "^7.0.0"
   },
   "devDependencies": {
